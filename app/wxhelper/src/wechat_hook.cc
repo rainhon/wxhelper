@@ -25,6 +25,10 @@ UINT64(*RealDoAddMsg)
 (UINT64, UINT64, UINT64) = (UINT64(*)(UINT64, UINT64, UINT64))(
     wxhelper::wxutils::GetWeChatWinBase() + offset::kDoAddMsg);
 
+char* (*RealLog)
+(int, UINT64, UINT32, UINT64, UINT64, UINT64, UINT64, UINT64, UINT64, UINT64, UINT64, UINT64) = (char* (*) (int, UINT64, UINT32, UINT64, UINT64, UINT64, UINT64, UINT64, UINT64, UINT64, UINT64, UINT64))(
+    wxhelper::wxutils::GetWeChatWinBase() + offset::kLog);
+
 VOID SendMsgCallback(PTP_CALLBACK_INSTANCE instance, PVOID context,
                      PTP_WORK Work) {
   common::InnerMessageStruct *msg = (common::InnerMessageStruct *)context;
@@ -200,6 +204,27 @@ int WechatHook::UnHookSyncMsg() {
   }
   return ret;
  }
- int WechatHook::HookLog() { return 0; }
+
+char* HandleLog(int param1, UINT64 param2, UINT32 param3, UINT64 param4, UINT64 param5, UINT64 param6, UINT64 param7, UINT64 param8, UINT64 param9, UINT64 param10, UINT64 param11, UINT64 param12) {
+    auto result = RealLog(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12);
+    SPDLOG_INFO("log: {}", result);
+    return result;
+}
+
+ int WechatHook::HookLog() { 
+    UINT64 base = wxhelper::wxutils::GetWeChatWinBase();
+    if (!base) {
+        SPDLOG_INFO("base addr is null");
+        return -1;
+    }
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+    DetourAttach(&(PVOID&)RealLog, &HandleLog);
+    LONG ret = DetourTransactionCommit();
+    return ret;
+ }
+
+
+
  int WechatHook::UnHookLog() { return 0; }
  }  // namespace hook

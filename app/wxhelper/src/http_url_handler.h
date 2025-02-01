@@ -6,6 +6,7 @@
 namespace wxhelper {
 std::string SendTextMsg(struct mg_http_message *hm);
 std::string HookSyncMsg(struct mg_http_message *hm);
+std::string HookLog(struct mg_http_message* hm);
 std::string GetContacts(struct mg_http_message *hm);
 std::string UnHookSyncMsg(struct mg_http_message *hm);
 std::string CheckLogin(struct mg_http_message *hm);

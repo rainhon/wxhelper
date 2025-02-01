@@ -467,6 +467,8 @@ const UINT64 kGetVoiceMgr = 0xbf78f0;
 const UINT64 kChatMsg2NetSceneSendMsg = 0x96e8d0;
 const UINT64 kTranslateVoice = 0x11217e0;
 
+const UINT64 kLog = 0x13d6bd0;
+
 }  // namespace offset
 }  // namespace V3_9_8_15
 

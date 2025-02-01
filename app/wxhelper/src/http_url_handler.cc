@@ -86,6 +86,14 @@ std::string HookSyncMsg(mg_http_message* hm) {
   return ret;
 }
 
+std::string HookLog(mg_http_message* hm) {
+    INT64 success = hook::WechatHook::GetInstance().HookLog();
+    nlohmann::json ret_data = {
+        {"code", success}, {"data", {}}, {"msg", "success"} };
+    std::string ret = ret_data.dump();
+    return ret;
+}
+
 std::string GetContacts(mg_http_message* hm) {
   std::vector<common::ContactInner> vec;
   INT64 success = WechatService::GetInstance().GetContacts(vec);

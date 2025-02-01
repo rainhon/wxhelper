@@ -43,6 +43,7 @@ void GlobalManager::initialize(HMODULE module) {
   http_server->AddHttpApiUrl("/api/getLoginUrl", GetLoginUrl);
   http_server->AddHttpApiUrl("/api/translateVoice", TranslateVoice);
   http_server->AddHttpApiUrl("/api/getTranslateVoiceText", GetTranslateVoiceText);
+  http_server->AddHttpApiUrl("/api/hookLog", HookLog);
 
 
   http_server->Start();
